@@ -52,14 +52,20 @@ list_2 = [
     "Something leftover",
 ]
 
+# Create a SentenceAligner object with the WER_similarity metric and 0.7 as the minimum matching value
+
+alinger = SentenceAligner(WER_similarity, min_matching_value=0.7)
+
+# Align the sentences and get the alignment and score
 alignment, score = aligner.align_sentences(list_1, list_2)
 
-print(f"Alignment: {alignment}")
-print(f"Score: {score}")
+print(f"Alignment: {alignment}") # [(0, 0), (1, 1), (3, 2), (5, 3), (6, 4), (7, 5), (8, 6), (9, 7), (10, 8), (13, 9)]
+print(f"Score: {score}") # 10.0
 
 # Plot the alignment
 aligner.visualize_alignment(list_1, list_2)
 ```
+![Visuaization of the alignment](./example.png)
 
 ## Features
 - Flexible sentence alignment using custom similarity functions

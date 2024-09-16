@@ -1,9 +1,47 @@
 import numpy as np
 from collections.abc import Callable
-from functools import lru_cache
 import matplotlib.pyplot as plt
 
 class SentenceAligner:
+    """
+    A class for aligning sentences using dynamic programming.
+
+    This class implements a dynamic programming algorithm for aligning two 
+    sentences or lists of words. It uses a custom similarity function to 
+    calculate the cost matrix between words, and then applies a dynamic 
+    programming approach to find the optimal alignment.
+
+    Parameters
+    ----------
+    similarity_function : Callable[[str, str], float]
+        A function that computes the similarity between two words. Higher is better.
+    min_matching_value : float, optional
+        The minimum similarity value for considering a match (default is 0.7).
+    normalize_matrix : bool, optional
+        Whether to normalize the cost matrix (default is False). Useful for metrics, which are mostly high, like BERTScore.
+
+    Attributes
+    ----------
+    similarity_function : Callable[[str, str], float]
+        The function used to compute word similarity.
+    min_matching_value : float
+        The minimum similarity threshold for matches.
+    normalize_matrix : bool
+        Whether the cost matrix is normalized.
+    cost_matrix : ndarray
+        The computed cost matrix for the current alignment.
+    dp : ndarray
+        The dynamic programming matrix for the current alignment.
+    alignment : list of tuple
+        The resulting alignment as a list of index pairs.
+
+    Methods
+    -------
+    align_sentences(list1, list2)
+        Align two lists of words and return the alignment and score.
+    visualize_alignment(list1, list2)
+        Visualize the alignment using a heatmap and path plot.
+    """
     def __init__(self, similarity_function: Callable[[str, str], float], min_matching_value: float =  0.7, normalize_matrix: bool = False):
         self.similarity_function = similarity_function
         self.min_matching_value = min_matching_value
