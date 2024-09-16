@@ -1,0 +1,30 @@
+big_list_1 = [
+    "This is the first sentence that does not match",
+    "Another unrelated sentence for testing",
+    "Matching sentence number one",
+    "Another matching sentence",
+    "Random Sentence which should match",
+    "This should be matched with something",
+    "Yet another matching sentence",
+    "Random Sentence which should match",
+    "This should be matched with something",
+    "Yet another matching sentence",
+    "Something that matches again",
+    "Unrelated sentence at the end of list one",
+    "Unrelated sentence at the end of list one two",
+    "Unrelated sentence at the end of list one three",
+    "The very last sentence in the list one",
+]
+
+big_list_2 = [
+  "Matching sentence number one",
+    "Another matching sentence",
+    "Random Sentence which should match",
+    "This should be matched with something",
+    "Yet another matching sentence",
+    "Random Sentence which should match",
+    "This should be matched with something",
+    "Yet another matching sentence",
+    "Something which does not match",
+    "Something that matches again",
+]
