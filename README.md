@@ -9,7 +9,9 @@ DTW-Sentence-Alignment is a Python package that provides functionality for align
 ## Installation
 
 To install the package, you can use pip:
-`pip install dtwsa`
+```bash
+pip install dtwsa
+```
 
 ## Usage
 
@@ -65,7 +67,7 @@ print(f"Score: {score}") # 10.0
 # Plot the alignment
 aligner.visualize_alignment(list_1, list_2)
 ```
-![Visuaization of the alignment](./example.png)
+![Visuaization of the alignment](https://raw.githubusercontent.com/i4Ds/DTW-Sentence-Alignment/main/example.png)
 
 ## Features
 - Flexible sentence alignment using custom similarity functions
