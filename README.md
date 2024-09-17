@@ -44,7 +44,6 @@ list_1 = [
 ]
 
 list_2 = [
-    "Something which does not match",
     "Matching sentence number one",
     "Another matching sentence",
     "Random Sentence which should match",
@@ -58,9 +57,10 @@ list_2 = [
 ]
 
 # Create a SentenceAligner object with the WER_similarity metric and 0.7 as the minimum matching value
-# The minimum matching value is useful to avoid matching sentences that are not similar enough. Better to not match anything than to match something that is not similar enough.
+# The minimum matching value is useful to avoid matching sentences that are not similar enough.
+# Better to not match anything than to match something that is not similar enough.
 
-alinger = SentenceAligner(WER_similarity, min_matching_value=0.7)
+aligner = SentenceAligner(WER_similarity, min_matching_value=0.7)
 
 # Align the sentences and get the alignment and score
 alignment, score = aligner.align_sentences(list_1, list_2)
