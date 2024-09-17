@@ -2,9 +2,12 @@
 
 A simple, low-dependency package for aligning sentences by minimizing a chosen metric.
 
+## Motivation
+I needed to match sentences between two lists and was disappointed to find that there wasn't a simple package available for this task without excessive dependencies or unintuitive interfaces.
+
 ## Overview
 
-DTW-Sentence-Alignment is a Python package that provides functionality for aligning sentences using Dynamic Time Warping (DTW) algorithm. It allows users to align sentences based on custom similarity functions or predefined metrics. The alignment works by maximizing a score. Additionally, compared to other implementation, the first starting point does not have to be (0,0) and the last ending point does not have to be (n,m).
+DTW-Sentence-Alignment is a Python package for aligning sentences using Dynamic Time Warping (DTW). It supports custom similarity functions and predefined metrics, maximizing alignment scores. Unlike traditional implementations, it allows flexible starting and ending points for alignment.
 
 ## Installation
 
@@ -55,6 +58,7 @@ list_2 = [
 ]
 
 # Create a SentenceAligner object with the WER_similarity metric and 0.7 as the minimum matching value
+# The minimum matching value is useful to avoid matching sentences that are not similar enough. Better to not match anything than to match something that is not similar enough.
 
 alinger = SentenceAligner(WER_similarity, min_matching_value=0.7)
 

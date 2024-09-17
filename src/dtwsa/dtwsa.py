@@ -23,8 +23,10 @@ class SentenceAligner:
 
     Attributes
     ----------
-    similarity_function : Callable[[str, str], float]
+    similarity_function : Optional[Callable[[str, str], float]]
         The function used to compute word similarity.
+    similarity_matrix : Optional[np.ndarray]
+        The computed similarity matrix for the current alignment.
     min_matching_value : float
         The minimum similarity threshold for matches.
     normalize_matrix : bool
@@ -48,6 +50,9 @@ class SentenceAligner:
         self.similarity_matrix = similarity_matrix
         self.min_matching_value = min_matching_value
         self.normalize_matrix = normalize_matrix
+
+        if self.similarity_matrix is None and self.similarity_function is None:
+            raise ValueError("Either similarity_function or similarity_matrix must be provided.")
 
     def _similarity(self, word1: str, word2: str) -> float:
         return self.similarity_function(word1, word2)
