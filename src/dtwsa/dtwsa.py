@@ -111,41 +111,71 @@ class SentenceAligner:
         
         return self.alignment, self.dp[n][m]  # Return alignment and final score
 
-    def visualize_alignment(self, list1, list2):
-        fig, ax = plt.subplots(figsize=(12, 10))
-        
+    def visualize_alignment(self, list1, list2, fig_size = (12, 10), show_sentences_as_labels=True, add_sim_value=True):
+        """
+        Visualize the alignment between two lists using a heatmap and path plot.
+
+        Parameters
+        ----------
+        list1 : list
+            The first list of words or tokens to be aligned.
+        list2 : list
+            The second list of words or tokens to be aligned.
+        fig_size : tuple, optional
+            The size of the figure in inches (width, height). Default is (12, 10).
+        show_sentences_as_labels : bool, optional
+            If True, display the actual words/tokens as axis labels. If False, only show indices. Default is True.
+        add_sim_value : bool, optional
+            If True, add similarity values as text annotations in each cell of the heatmap. Default is True.
+        Returns
+        Returns
+        -------
+        None
+            This method displays the plot but does not return any value.
+
+        Notes
+        -----
+        This method creates a heatmap of the similarity matrix with the alignment path
+        overlaid. The color intensity in the heatmap represents the similarity score
+        between words, and the blue line represents the optimal alignment path.
+        """
+        fig, ax = plt.subplots(figsize=fig_size)
+
         # Create a heatmap of the cost matrix
         im = ax.imshow(self.similarity_matrix, cmap='YlOrRd')
-        
+
         # Add colorbar
         cbar = ax.figure.colorbar(im, ax=ax)
         cbar.ax.set_ylabel("WER Cost", rotation=-90, va="bottom")
-        
+
         # Plot the alignment path
         alignment_coords = [(j, i) for i, j in self.alignment]
         x, y = zip(*alignment_coords)
         ax.plot(x, y, color='blue', linewidth=2, marker='o', markersize=6)
-        
+
         # Set labels and title
         ax.set_xlabel('List 2')
         ax.set_ylabel('List 1')
         ax.set_title('Sentence Alignment Visualization')
-        
+
         # Set tick labels
         ax.set_xticks(np.arange(len(list2)))
         ax.set_yticks(np.arange(len(list1)))
-        ax.set_xticklabels(list2)
-        ax.set_yticklabels(list1)
-        
+
+        if show_sentences_as_labels:
+            ax.set_xticklabels(list2)
+            ax.set_yticklabels(list1)
+
         # Rotate the tick labels and set their alignment
         plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-        
+
         # Loop over data dimensions and create text annotations
-        for i in range(len(list1)):
-            for j in range(len(list2)):
-                text = ax.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
-                            ha="center", va="center", color="black")
-        
+        if add_sim_value:
+            for i in range(len(list1)):
+                for j in range(len(list2)):
+                    text = ax.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
+                                ha="center", va="center", color="black")
+
         # Adjust layout and display
         plt.tight_layout()
         plt.show()

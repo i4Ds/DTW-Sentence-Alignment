@@ -1,0 +1,1 @@
+from .dtwsa import SentenceAligner

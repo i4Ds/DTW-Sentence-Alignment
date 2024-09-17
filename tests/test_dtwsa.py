@@ -1,5 +1,5 @@
 import pytest
-from dtwsa.dtwsa import SentenceAligner
+from dtwsa import SentenceAligner
 from dtwsa.metrics import WER_similarity
 from test_data import big_list_1, big_list_2
 
