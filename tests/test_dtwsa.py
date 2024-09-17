@@ -55,6 +55,16 @@ def test_wer_similarity():
     score = WER_similarity("The cat sat on a mat.", "A cat was sitting on the mat.")
     pytest.approx(score, 0.8333333333333334)
 
+def test_similarity_matrix():
+    aligner = SentenceAligner(WER_similarity)
+    aligner._get_similarity_matrix(big_list_1, big_list_2)
+    sim_matrix = aligner.similarity_matrix
+    
+    aligner = SentenceAligner(similarity_matrix=sim_matrix)
+    alignment, score = aligner.align_sentences(big_list_1, big_list_2)
+
+    assert score == 9
+    assert alignment == [(2, 0), (3, 1), (4, 2), (5, 3), (6, 4), (7, 5), (8, 6), (9, 7), (10, 9)]
 
 def test_bigger():
     aligner = SentenceAligner(WER_similarity)

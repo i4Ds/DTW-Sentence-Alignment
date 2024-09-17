@@ -1,6 +1,7 @@
 import numpy as np
 from collections.abc import Callable
 import matplotlib.pyplot as plt
+from typing import Callable, Optional
 
 class SentenceAligner:
     """
@@ -28,8 +29,8 @@ class SentenceAligner:
         The minimum similarity threshold for matches.
     normalize_matrix : bool
         Whether the cost matrix is normalized.
-    cost_matrix : ndarray
-        The computed cost matrix for the current alignment.
+    similarity_matrix : ndarray
+        The computed similarity matrix for the current alignment.
     dp : ndarray
         The dynamic programming matrix for the current alignment.
     alignment : list of tuple
@@ -42,26 +43,27 @@ class SentenceAligner:
     visualize_alignment(list1, list2)
         Visualize the alignment using a heatmap and path plot.
     """
-    def __init__(self, similarity_function: Callable[[str, str], float], min_matching_value: float =  0.7, normalize_matrix: bool = False):
+    def __init__(self, similarity_function: Optional[Callable[[str, str], float]] = None, similarity_matrix: Optional[np.ndarray] = None, min_matching_value: float =  0.7, normalize_matrix: bool = False):
         self.similarity_function = similarity_function
+        self.similarity_matrix = similarity_matrix
         self.min_matching_value = min_matching_value
         self.normalize_matrix = normalize_matrix
 
     def _similarity(self, word1: str, word2: str) -> float:
         return self.similarity_function(word1, word2)
         
-    def _get_cost_matrix(self, list1, list2):
+    def _get_similarity_matrix(self, list1, list2):
         n, m = len(list1), len(list2)
-        cost_matrix = np.zeros((n, m))
+        similarity_matrix = np.zeros((n, m))
 
         for i in range(n):     
             for j in range(m):         
-                cost_matrix[i, j] = self._similarity(list1[i], list2[j])
+                similarity_matrix[i, j] = self._similarity(list1[i], list2[j])
 
         if self.normalize_matrix:
-            cost_matrix = (cost_matrix - cost_matrix.min()) / (cost_matrix.max() - cost_matrix.min())
+            similarity_matrix = (similarity_matrix - similarity_matrix.min()) / (similarity_matrix.max() - similarity_matrix.min())
 
-        self.cost_matrix = cost_matrix
+        self.similarity_matrix = similarity_matrix
 
     def align_sentences(self, list1, list2): # The Dynamic-Programming Alignment Algorithm.
         n, m = len(list1), len(list2)
@@ -70,13 +72,15 @@ class SentenceAligner:
         self.dp = np.zeros((n + 1, m + 1))
 
         # Calculate cost matrix
-        self._get_cost_matrix(list1, list2)
+        if self.similarity_matrix is None:
+            print(self.similarity_matrix)
+            self._get_similarity_matrix(list1, list2)
         
         # Fill the dynamic programming matrix
         for i in range(1, n + 1):
             for j in range(1, m + 1):
-                if self.cost_matrix[i-1][j-1] >= self.min_matching_value:
-                    match = self.dp[i-1][j-1] + self.cost_matrix[i-1][j-1]
+                if self.similarity_matrix[i-1][j-1] >= self.min_matching_value:
+                    match = self.dp[i-1][j-1] + self.similarity_matrix[i-1][j-1]
                 else:
                     match = self.dp[i-1][j-1]  # No score added if below threshold
                 skip_list1 = self.dp[i-1][j] 
@@ -87,7 +91,7 @@ class SentenceAligner:
         alignment = []
         i, j = n, m
         while i > 0 and j > 0:
-            if self.dp[i][j] == self.dp[i-1][j-1] + self.cost_matrix[i-1][j-1]:
+            if self.dp[i][j] == self.dp[i-1][j-1] + self.similarity_matrix[i-1][j-1]:
                 alignment.append((i-1, j-1))
                 i -= 1
                 j -= 1
@@ -106,7 +110,7 @@ class SentenceAligner:
         fig, ax = plt.subplots(figsize=(12, 10))
         
         # Create a heatmap of the cost matrix
-        im = ax.imshow(self.cost_matrix, cmap='YlOrRd')
+        im = ax.imshow(self.similarity_matrix, cmap='YlOrRd')
         
         # Add colorbar
         cbar = ax.figure.colorbar(im, ax=ax)
@@ -134,7 +138,7 @@ class SentenceAligner:
         # Loop over data dimensions and create text annotations
         for i in range(len(list1)):
             for j in range(len(list2)):
-                text = ax.text(j, i, f"{self.cost_matrix[i, j]:.2f}",
+                text = ax.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
                             ha="center", va="center", color="black")
         
         # Adjust layout and display

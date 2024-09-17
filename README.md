@@ -76,7 +76,7 @@ aligner.visualize_alignment(list_1, list_2)
 
 
 ## TODO
-1. Improve efficiency of the alignment algorithm
-2. Improve efficiency of the alignment algorithm
-3. Improve efficiency of the alignment algorithm
+1. Improve efficiency of the alignment algorithm by limiting the choices of the alignment by limiting the maximum distance of indexes between matches.
+2. Improve efficiency of the alignment algorithm by implementing a version of PrunedDTW.
+3. Improve efficiency of the alignment algorithm by parallelization.
 2. Add new metrics for sentence comparison (e.g., BLEU score, cosine similarity)
